@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELEGANT Travel - Single Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="single-page.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+    <!-- 导航栏部分 -->
+    <header role="banner" aria-label="Website header">
+        <nav class="navbar navbar-expand-lg navbar-light sticky-top" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <a class="navbar-brand" href="#">ELEGANT</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#destinations">Destinations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#stories">Stories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 首页部分 -->
+        <section id="home" class="hero-carousel" aria-label="Featured destinations">
+            <div class="carousel-inner">
+                <article class="carousel-item active" role="article">
+                    <div class="hero-image" style="background-image: url('assets/1.avif')"></div>
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                    
+                        <h1>Discover the World with Elegance</h1>
+                        <p class="hero-subtitle">Curated experiences for the discerning explorer</p>
+                       
+                    </div>
+                </article>
+                <article class="carousel-item" role="article">
+                    <div class="hero-image" style="background-image: url('assets/2.avif')"></div>
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                       
+                        <h1>Authentic Encounters</h1>
+                        <p class="hero-subtitle">Connect with local traditions and hidden gems</p>
+                      
+                    </div>
+                </article>
+                <article class="carousel-item" role="article">
+                    <div class="hero-image" style="background-image: url('assets/3.avif')"></div>
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                   
+                        <h1>Beyond the Ordinary</h1>
+                        <p class="hero-subtitle">Where sophistication meets adventure</p>
+                     
+                    </div>
+                </article>
+                <article class="carousel-item" role="article">
+                    <div class="hero-image" style="background-image: url('assets/4.avif')"></div>
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                  
+                        <h1>Paradise Found</h1>
+                        <p class="hero-subtitle">Pristine beaches and turquoise waters</p>
+                    
+                    </div>
+                </article>
+                <article class="carousel-item" role="article">
+                    <div class="hero-image" style="background-image: url('assets/5.avif')"></div>
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                  
+                        <h1>World's Most Elegant Cities</h1>
+                        <p class="hero-subtitle">Sophisticated metropolitan experiences</p>
+                    
+                    </div>
+                </article>
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup Section -->
+        <div id="app">
+            <div class="natgeo-style-footer">
+                <div class="footer-background">
+                    <div class="bg-overlay"></div>
+                </div>
+                
+                <div class="newsletter-signup">
+                    <div class="signup-text">
+                        <h2>THE BEST OF ELEGANT TRAVEL DELIVERED TO YOUR INBOX</h2>
+                        <p>Sign up for more inspiring destinations, travel stories, and special offers from ELEGANT Travel.</p>
+                    </div>
+                    <button class="signup-btn" @click="toggleForm">SIGN UP</button>
+                </div>
+                
+                <!-- Modal Overlay -->
+                <div class="modal-overlay" v-if="showForm" @click="cancelForm"></div>
+                
+                <!-- Signup Form -->
+                <div class="signup-form" v-if="showForm">
+                    <h3>Plan Your Elegant Journey</h3>
+                    <form @submit.prevent="submitForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" v-model="formData.name" 
+                                       placeholder="Full Name*" required>
+                                <span class="error-message" v-if="errors.name">{{ errors.name }}</span>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" v-model="formData.email" 
+                                       placeholder="Email*" required>
+                                <span class="error-message" v-if="errors.email">{{ errors.email }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <select v-model="formData.destination" required>
+                                    <option value="" disabled>Destination Interest*</option>
+                                    <option v-for="dest in destinations" :key="dest.value" :value="dest.value">
+                                        {{ dest.label }}
+                                    </option>
+                                </select>
+                                <span class="error-message" v-if="errors.destination">{{ errors.destination }}</span>
+                            </div>
+                            <div class="form-group">
+                                <input type="date" v-model="formData.travelDate" required>
+                                <span class="error-message" v-if="errors.travelDate">{{ errors.travelDate }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <textarea v-model="formData.message" 
+                                      placeholder="Tell us about your dream journey..."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">Submit</button>
+                            <button type="button" class="cancel-btn" @click="cancelForm">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 目的地部分 -->
+        <section id="destinations" class="hero-section">
+            <div class="hero-video-container">
+                <video class="hero-video" autoplay loop muted>
+                    <source src="assets/travel.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Discover World's Beauty</h1>
+                <p>Explore the most amazing travel destinations</p>
+            </div>
+        </section>
+
+        <!-- 目的地网格部分 -->
+        <section class="destinations-grid">
+            <div class="section-container">
+                <h2 class="section-title">Popular Destinations</h2>            
+                <div class="search-container">
+                    <input type="text" id="destination-search" placeholder="Search destinations...">
+                    <button id="confirm-search">confirm</button>
+                </div>
+                <button id="back-button">back</button>
+                <div class="button-container">
+                    <button id="expand-cards-btn">Show All</button>
+                    <button id="collapse-cards-btn" style="display: none;">Collapse</button>
+                </div>
+                <div class="grid-container">
+                    <div class="destination-card">
+                        <img src="assets/tokyo2.jpg" alt="Tokyo">
+                        <div class="card-content">
+                            <h3>Tokyo (Japan)</h3>
+                            <p>Explore this vibrant modern metropolis</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Tokyo, Japan's busy capital, mixes the ultramodern and the traditional, from neon-lit skyscrapers to historic temples. Experience the world's most efficient public transport system, indulge in authentic Japanese cuisine, and immerse yourself in unique pop culture.</p>
+                                <ul>
+                                    <li>Visit the iconic Tokyo Tower</li>
+                                    <li>Experience the Shibuya Crossing</li>
+                                    <li>Explore traditional temples and gardens</li>
+                                    <li>Enjoy world-class shopping districts</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/venice2.jpg" alt="Venice">
+                        <div class="card-content">
+                            <h3>Venice (Italy)</h3>
+                            <p>Experience the unique charm of the romantic water city</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Venice, the capital of northern Italy's Veneto region, is built on more than 100 small islands in a lagoon in the Adriatic Sea. The city has no roads, just canals – including the Grand Canal thoroughfare – lined with Renaissance and Gothic palaces.</p>
+                                <ul>
+                                    <li>Take a gondola ride through the canals</li>
+                                    <li>Visit St. Mark's Basilica</li>
+                                    <li>Explore the Doge's Palace</li>
+                                    <li>Experience the Venice Carnival</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/b3.png" alt="Moscow">
+                        <div class="card-content">
+                            <h3>Moscow (Russia)</h3>
+                            <p>Experience the essence of Russian culture</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Moscow, on the Moskva River in western Russia, is the nation's cosmopolitan capital. In its historic core is the Kremlin, a complex that's home to the president and tsarist treasures in the Armoury. Outside its walls is Red Square, Russia's symbolic center.</p>
+                                <ul>
+                                    <li>Visit the iconic Red Square</li>
+                                    <li>Explore the magnificent Kremlin</li>
+                                    <li>See St. Basil's Cathedral</li>
+                                    <li>Experience the Moscow Metro</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/lio2.jpg" alt="Rio de Janeiro">
+                        <div class="card-content">
+                            <h3>Rio de Janeiro (Brazil)</h3>
+                            <p>Experience Brazil's passion and energy</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Rio de Janeiro is a huge seaside city in Brazil, famed for its Copacabana and Ipanema beaches, Christ the Redeemer statue atop Mount Corcovado, and Sugarloaf Mountain. The city is also known for its sprawling favelas, its carnival festival, and its samba-fueled nightlife.</p>
+                                <ul>
+                                    <li>Visit Christ the Redeemer</li>
+                                    <li>Relax on Copacabana Beach</li>
+                                    <li>Take the cable car to Sugarloaf Mountain</li>
+                                    <li>Experience the Rio Carnival</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/louvre2.jpg" alt="Paris">
+                        <div class="card-content">
+                            <h3>Paris (France)</h3>
+                            <p>Discover the city of lights and love</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Paris, France's capital, is a major European city and a global center for art, fashion, gastronomy and culture. Its picturesque 19th-century cityscape is crisscrossed by wide boulevards and the River Seine, making it one of the most beautiful cities in the world.</p>
+                                <ul>
+                                    <li>Visit the iconic Eiffel Tower</li>
+                                    <li>Explore the Louvre Museum</li>
+                                    <li>Walk along the Champs-Élysées</li>
+                                    <li>Experience French cuisine</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/am.png" alt="Amsterdam">
+                        <div class="card-content">
+                            <h3>Amsterdam (Netherlands)</h3>
+                            <p>Discover Amsterdam's Keukenhof Park, a spectacular tulip wonderland.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Amsterdam, located in the western part of the Netherlands and crisscrossed by numerous canals, is a vibrant and culturally rich city. It is renowned for its unique architecture, world-class museums, and a lively atmosphere. The city center is filled with charming narrow streets and historic buildings.</p>
+                                <ul>
+                                    <li>Take a scenic canal cruise</li>
+                                    <li>Visit the Van Gogh Museum</li>
+                                    <li>Explore the Anne Frank House</li>
+                                    <li>Stroll through the Vondelpark</li>
+                                    <li>Discover the Rijksmuseum</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/swi.png" alt="Switzerland">
+                        <div class="card-content">
+                            <h3>Bernese Oberland (Switzerland)</h3>
+                            <p>Explore Switzerland's Jungfrau, an iconic peak with breathtaking alpine scenery.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Switzerland, nestled in the heart of Europe and renowned for its stunning alpine landscapes, is a landlocked country celebrated for its precision - made watches, delectable chocolate, and neutrality. It boasts some of the most majestic mountain ranges, including the Alps, and is dotted with picturesque lakes and charming medieval towns.</p>
+                                <ul>
+                                    <li>Climb the iconic Matterhorn</li>
+                                    <li>Explore the historic Old Town of Bern</li>
+                                    <li>Visit the beautiful Lake Geneva</li>
+                                    <li>Experience the Jungfrau Railway</li>
+                                    <li>Admire the Rhine Falls</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/sy.png" alt="Sydney">
+                        <div class="card-content">
+                            <h3>Sydney (Australia)</h3>
+                            <p>Behold Sydney Opera House: Australia's iconic sail-shaped marvel.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Sydney, located on the southeastern coast of Australia, is the country's largest and most vibrant city. It is famous for its spectacular natural harbor, a mix of modern and historic architecture, and a rich cultural scene. Sydney Harbour serves as the heart of the city, with iconic landmarks dotting its shores.</p>
+                                <ul>
+                                    <li>Visit the iconic Sydney Opera House</li>
+                                    <li>Climb the Sydney Harbour Bridge for a panoramic view</li>
+                                    <li>Explore the historic Rocks area</li>
+                                    <li>Relax on the beautiful Bondi Beach</li>
+                                    <li>See the Taronga Zoo with diverse wildlife</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/how.png" alt="New Zealand">
+                        <div class="card-content">
+                            <h3>The North Island (New Zealand)</h3>
+                            <p>Unveil New Zealand's Hobbiton: Tolkien's Enchanted Village</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>New Zealand, a dual - island nation in the southwestern Pacific Ocean, is a land of unparalleled natural beauty. The North Island features geothermal wonders like geysers and hot springs, while the South Island is home to majestic snow - capped mountains and pristine fjords. Wellington, the capital, is a vibrant city with a rich cultural scene.</p>
+                                <ul>
+                                    <li>Visit the geothermal Rotorua on the North Island</li>
+                                    <li>Explore the majestic Milford Sound in the South Island</li>
+                                    <li>See the unique Moeraki Boulders on the Otago coast</li>
+                                    <li>Experience the Maori culture in Auckland</li>
+                                    <li>Climb the Tongariro National Park's volcanic peaks</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/sing.png" alt="Singapore">
+                        <div class="card-content">
+                            <h3>River Estuary (Singapore)</h3>
+                            <p>See Singapore's Merlion Park with its iconic statue overlooking the harbor.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Singapore, a city-state located at the southern tip of the Malay Peninsula, is a vibrant and modern metropolis. It is renowned for its clean streets, diverse cultures, and a harmonious blend of the old and the new. The heart of Singapore is centered around Marina Bay, which is a showcase of modern architecture and urban planning.</p>
+                                <ul>
+                                    <li>Visit the iconic Marina Bay Sands with its spectacular infinity pool</li>
+                                    <li>Explore the historic Chinatown and soak in its rich Chinese culture</li>
+                                    <li>See the Gardens by the Bay, a world-famous nature park with supertrees</li>
+                                    <li>Experience the bustling Orchard Road for a great shopping spree</li>
+                                    <li>Discover the Merlion Park, the symbolic landmark of Singapore</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/thai.png" alt="Thailand">
+                        <div class="card-content">
+                            <h3>Chiang Mai (Thailand)</h3>
+                            <p>Explore Chiang Mai's sacred, ornate temples.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Chiang Mai, nestled in the mountains of northern Thailand, is a city celebrated for its rich culture, ancient traditions, and tranquil atmosphere. At its heart lies the Old City, a walled area filled with historical sites and spiritual landmarks that showcase the city's past as the capital of the Lanna Kingdom.</p>
+                                <ul>
+                                    <li>Visit the iconic Wat Phra That Doi Suthep, perched high on a mountain with stunning views</li>
+                                    <li>Explore the ancient ruins of Wat Chedi Luang in the Old City</li>
+                                    <li>See the intricate architecture of Wat Phra Singh</li>
+                                    <li>Experience the vibrant Night Bazaar for shopping and local cuisine</li>
+                                    <li>Discover the Elephant Nature Park, a sanctuary for rescued elephants</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/las.png" alt="USA">
+                        <div class="card-content">
+                            <h3>Las Vegas (USA)</h3>
+                            <p>Explore the dazzling entertainment and gambling capital of the world.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Las Vegas, located in the Nevada desert of the United States, is a vibrant city famous for its world - class entertainment, luxurious resorts, and bustling casinos. At its center is The Strip, a stretch lined with opulent hotels, dazzling lights, and iconic landmarks that attract millions of visitors each year.</p>
+                                <ul>
+                                    <li>Visit the iconic Fountains of Bellagio</li>
+                                    <li>Explore the luxurious Venetian Resort</li>
+                                    <li>See the High Roller, the world's tallest Ferris wheel</li>
+                                    <li>Experience the vibrant nightlife on The Strip</li>
+                                    <li>Admire the Eiffel Tower Experience at Paris Las Vegas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/bjing.png" alt="Beijing">
+                        <div class="card-content">
+                            <h3>Beijing (China)</h3>
+                            <p>World-famous Great Wall in Beijing</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Beijing, a metropolis in northern China, is the country's political and cultural heart. At its essence lies the Forbidden City, an imperial complex housing historical artifacts and imperial legacies. Adjacent is Tiananmen Square, China's monumental center.</p>
+                                <ul>
+                                    <li>Admire the grandeur of the Forbidden City</li>
+                                    <li>Stand in awe at Tiananmen Square</li>
+                                    <li>Climb the world - renowned Great Wall</li>
+                                    <li>Explore the intricate Temple of Heaven</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/cophen.png" alt="Copenhagen">
+                        <div class="card-content">
+                            <h3>Copenhagen (Denmark)</h3>
+                            <p>Admire Copenhagen's Little Mermaid statue.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Copenhagen, straddling the Oresund Strait in eastern Denmark, is the nation's vibrant capital. At its heart is Nyhavn, a picturesque canal lined with colorful townhouses and bustling with cafes. Nearby stands the iconic Little Mermaid statue, a symbol of the city.</p>
+                                <ul>
+                                    <li>Stroll along the charming Nyhavn</li>
+                                    <li>Marvel at the Little Mermaid statue</li>
+                                    <li>Explore the Tivoli Gardens</li>
+                                    <li>Visit the Christiansborg Palace</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/hfcave.png" alt="Malaysia">
+                        <div class="card-content">
+                            <h3>Kuala Lumpur (Malaysia)</h3>
+                            <p>Discover Kuala Lumpur's iconic Batu Caves</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Kuala Lumpur, in the western part of Malaysia, is the country's dynamic capital. At its core stands the Petronas Twin Towers, a modern architectural marvel offering panoramic city views. Nearby is Merdeka Square, a place full of historical significance.</p>
+                                <ul>
+                                    <li>Admire the towering Petronas Twin Towers</li>
+                                    <li>Wander around Merdeka Square</li>
+                                    <li>Explore the Batu Caves</li>
+                                    <li>Indulge in local cuisine at Jalan Alor</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/maij.png" alt="Mecca">
+                        <div class="card-content">
+                            <h3>Mecca (Saudi Arabia)</h3>
+                            <p>Pilgrimage to Mecca's Grand Mosque, Islam's holiest site.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Mecca, in the western part of Saudi Arabia, is the holiest city in Islam. At its center is the Masjid al - Haram, a vast and sacred mosque housing the Kaaba, the most revered site for Muslims. Around it, pilgrims from all over the world gather for religious rituals.</p>
+                                <ul>
+                                    <li>Perform rituals at Masjid al - Haram</li>
+                                    <li>Circumambulate the sacred Kaaba</li>
+                                    <li>Join the grand Hajj pilgrimage</li>
+                                    <li>Explore the historical sites in Mecca</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/swan.png" alt="Germany">
+                        <div class="card-content">
+                            <h3>Bavaria (Germany)</h3>
+                            <p>Marvel at Germany's fairy-tale Neuschwanstein Castle</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Bavaria, in the southeastern part of Germany, is a state renowned for its rich culture and stunning landscapes. At its heart, Munich is a vibrant city with the famous Marienplatz, a lively square filled with historical buildings. In the countryside, Neuschwanstein Castle stands as a fairytale-like masterpiece, attracting visitors from around the world.</p>
+                                <ul>
+                                    <li>Explore the bustling Marienplatz in Munich</li>
+                                    <li>Admire the enchanting Neuschwanstein Castle</li>
+                                    <li>Indulge in Bavarian beer and local cuisine</li>
+                                    <li>Visit the beautiful Lake Königssee</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/kbk.png" alt="Canada">
+                        <div class="card-content">
+                            <h3>Quebec (Canada)</h3>
+                            <p>Experience Quebec's unique blend of history and culture.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>Quebec, in eastern Canada, is a province full of rich history and unique culture. At its core lies Old Quebec, a UNESCO World Heritage site with cobblestone streets and fortified walls. Dominating the skyline is the Château Frontenac, an iconic and luxurious hotel.</p>
+                                <ul>
+                                    <li>Wander through the charming Old Quebec</li>
+                                    <li>Admire the grand Château Frontenac</li>
+                                    <li>Participate in Quebec Winter Carnival</li>
+                                    <li>Explore the Musée national des beaux - arts du Québec</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <img src="assets/bigben.png" alt="UK">
+                        <div class="card-content">
+                            <h3>London (UK)</h3>
+                            <p>Gaze at London's iconic Big Ben.</p>
+                            <button class="expand-btn">Learn More</button>
+                            <div class="card-details">
+                                <p>London, on the River Thames in southern England, is the United Kingdom's dynamic capital. In its historical center stands the Tower of London, a castle that has served as a royal palace, prison, and treasury. Nearby is the Palace of Westminster, home to the UK Parliament and the famous Big Ben clock tower.</p>
+                                <ul>
+                                    <li>Tour the historic Tower of London</li>
+                                    <li>Explore the Palace of Westminster</li>
+                                    <li>See the majestic Big Ben</li>
+                                    <li>Stroll along the South Bank of the Thames</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 故事部分 -->
+        <section id="stories" class="hero-grid">
+            <h1 class="hero-title-overlay">Travel Stories</h1>
+
+            <div class="hero-panel" style="background-image: url('assets/JG.jpg');">
+                <div class="hero-overlay"></div>
+                <div class="hero-caption">
+                    5 magical Northern Lights viewing tips<br>in Reykjavik, Iceland
+                </div>
+            </div>
+
+            <div class="hero-panel" style="background-image: url('assets/NFKPD.jpg');">
+                <div class="hero-overlay"></div>
+                <div class="hero-caption">
+                    5 vineyard stops with ocean views & local Pinotage<br>in Cape Town, South Africa
+                </div>
+            </div>
+
+            <div class="hero-panel" style="background-image: url('assets/KLDY.jpg');">
+                <div class="hero-overlay"></div>
+                <div class="hero-caption">
+                    3 medieval walls to walk King's Landing at golden hour<br>in Dubrovnik, Croatia
+                </div>
+            </div>
+
+            <!-- 故事面板内容 -->
+            <div id="reykjavik" class="story-panel dn">
+                <div class="story-content">
+                    <h2>Northern Lights in Reykjavik</h2>
+                    <div class="story-text">
+                        <p>Experience the magical Northern Lights in Reykjavik, Iceland's capital. Here are 5 tips for the best viewing experience:</p>
+                        <ol>
+                            <li>Visit between September and April for the best chances</li>
+                            <li>Check the aurora forecast before heading out</li>
+                            <li>Find a dark spot away from city lights</li>
+                            <li>Dress warmly and bring hot drinks</li>
+                            <li>Be patient - the lights can appear suddenly</li>
+                        </ol>
+                        <p>Remember to book your accommodation in advance, as this is a popular time to visit Iceland.</p>
+                    </div>
+                    <button class="back-btn">Back to Stories</button>
+                </div>
+            </div>
+
+            <div id="capetown" class="story-panel dn">
+                <div class="story-content">
+                    <h2>Wine Tasting in Cape Town</h2>
+                    <div class="story-text">
+                        <p>Discover the best vineyard stops in Cape Town with stunning ocean views:</p>
+                        <ol>
+                            <li>Constantia Wine Route - South Africa's oldest wine region</li>
+                            <li>Stellenbosch Wine Route - known for Pinotage</li>
+                            <li>Franschhoek Wine Valley - French-inspired estates</li>
+                            <li>Paarl Wine Route - historic wine estates</li>
+                            <li>Durbanville Wine Valley - close to the city</li>
+                        </ol>
+                        <p>Each region offers unique wine tasting experiences and breathtaking views of the surrounding landscapes.</p>
+                    </div>
+                    <button class="back-btn">Back to Stories</button>
+                </div>
+            </div>
+
+            <div id="dubrovnik" class="story-panel dn">
+                <div class="story-content">
+                    <h2>King's Landing in Dubrovnik</h2>
+                    <div class="story-text">
+                        <p>Explore the medieval walls of Dubrovnik, the real-life King's Landing from Game of Thrones:</p>
+                        <ol>
+                            <li>Walk the ancient city walls at sunset</li>
+                            <li>Visit Fort Lovrijenac (Red Keep)</li>
+                            <li>Explore the Old Town's narrow streets</li>
+                        </ol>
+                        <p>The golden hour light creates a magical atmosphere, perfect for photography and experiencing the city's medieval charm.</p>
+                    </div>
+                    <button class="back-btn">Back to Stories</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 精选故事区 -->
+        <section class="featured-stories elegant-section">
+            <div class="section-container">
+                <div class="featured-content-background">
+                    <h2 class="section-title">Editor's Picks</h2>
+
+                    <div class="story-list">
+                        <!-- 第一个故事项 -->
+                        <a href="javascript:void(0);" class="story-item">
+                            <img src="assets/shuimiao.jpg" alt="Bali Water Temples" class="story-image">
+                            <div class="story-content">
+                                <h4 class="story-category">CULTURE</h4>
+                                <h3>Finding Zen in Bali's Secret Water Temples</h3>
+                                <p>Hidden temples, rice terraces, and soulful traditions away from the crowds.</p>
+                                <button class="toggle-btn" onclick="toggleStory('bali')">Read More</button>
+                                <div class="extra-content" id="extra-bali">
+                                    <div class="content-wrapper">
+                                        <div class="text-content">
+                                            <h2 class="bali-title">🌿 Finding Zen in Bali's Secret Water Temples</h2>
+                                            <p class="intro-text">Escape the crowds and explore Bali's hidden water temples, where serenity meets ancient traditions. These sacred sites nestled in lush landscapes provide a peaceful retreat into nature.</p>
+                                            <h3 class="highlights-title">✨ Highlights:</h3>
+                                            <ul class="highlights-list">
+                                                <li>Ancient water temples hidden in lush jungles</li>
+                                                <li>Traditional purification ceremonies</li>
+                                                <li>Stunning rice terrace views</li>
+                                                <li>Local spiritual practices</li>
+                                            </ul>
+                                            <p class="memories-text">Discover the soul of Bali beyond the tourist spots.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- 第二个故事项 -->
+                        <a href="javascript:void(0);" class="story-item">
+                            <img src="assets/aiqinhai.jpeg" alt="Santorini Sunset" class="story-image">
+                            <div class="story-content">
+                                <h4 class="story-category">DESTINATIONS</h4>
+                                <h3>Sunsets & Whitewashed Dreams in Santorini</h3>
+                                <p>Blue domes and fiery sunsets over the Aegean Sea.</p>
+                                <button class="toggle-btn" onclick="toggleStory('santorini')">Read More</button>
+                                <div class="extra-content" id="extra-santorini">
+                                    <h2 class="santorini-title">🌅 Sunsets & Whitewashed Dreams in Santorini</h2>
+                                    <p class="intro-text">Escape to the iconic island of Santorini, where blue domes and whitewashed buildings create a stunning contrast against the fiery sunsets over the Aegean Sea. Wander through narrow, cobblestone streets, discover charming villages, and soak in breathtaking views from cliffside cafes. Whether you're enjoying a glass of local wine or watching the sky turn shades of pink and orange as the sun dips below the horizon, Santorini offers a dreamy experience that will stay with you forever.</p>
+
+                                    <h3 class="experience-title">✨ Experience Santorini:</h3>
+                                    <ul class="experience-list">
+                                        <li>Breathtaking Sunsets over the Aegean Sea</li>
+                                        <li>Charming Villages with stunning views</li>
+                                        <li>Beautiful Blue Domes and whitewashed architecture</li>
+                                        <li>Delicious Local Wines and authentic Greek cuisine</li>
+                                    </ul>
+
+                                    <p class="memories-text">Come for the sunsets, stay for the memories.</p>
+
+                                    <h3 class="plan-title">📍 Plan your Santorini escape today!</h3>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- 第三个故事项 -->
+                        <a href="javascript:void(0);" class="story-item">
+                            <img src="assets/yinghua.jpg" alt="Kyoto Cherry Blossoms" class="story-image">
+                            <div class="story-content">
+                                <h4 class="story-category">SEASONS</h4>
+                                <h3>Cherry Blossoms and Ancient Traditions in Kyoto</h3>
+                                <p>Temples, geishas, and a world painted in pink petals.</p>
+                                <button class="toggle-btn" onclick="toggleStory('kyoto')">Read More</button>
+                                <div class="extra-content" id="extra-kyoto">
+                                    <h2 class="kyoto-title">🌸 Cherry Blossoms and Ancient Traditions in Kyoto</h2>
+                                    <p class="intro-text">Witness the breathtaking beauty of Kyoto during cherry blossom season. The ancient temples and traditional gardens are transformed into a magical landscape of pink petals, creating an unforgettable experience.</p>
+                                    <h3 class="experience-title">✨ Experience Kyoto:</h3>
+                                    <ul class="experience-list">
+                                        <li>Ancient temples surrounded by cherry blossoms</li>
+                                        <li>Traditional tea ceremonies</li>
+                                        <li>Geisha performances in Gion district</li>
+                                        <li>Night illuminations of cherry blossoms</li>
+                                    </ul>
+                                    <p class="memories-text">A journey through time in Japan's cultural heart.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于部分 -->
+        <section id="about" class="hero-section">
+            <div class="hero-video-container">
+                <img src="assets/about_bg.png" alt="About Background" class="hero-video">
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Our Story & Mission</h1>
+                <p>Discover the journey behind ELEGANT Travel</p>
+                <a href="#our-story" class="hero-button">Explore Our Journey</a>
+            </div>
+        </section>
+
+        <!-- 关于内容部分 -->
+        <section  id="our-story" class="elegant-section section-graphite">
+            <div class="section-container">
+                <h2 class="about-elegant-travel">About ELEGANT Travel</h2>
+                <div class="about-content">
+                    <article class="about-text">
+                        <h3>Our Beginnings</h3>
+                        <p>ELEGANT Travel is a premium travel magazine dedicated to providing discerning travelers with the finest travel experiences around the world. Our mission is to inspire, inform, and elevate your journey by showcasing the best of luxury travel, cultural exploration, and adventure.</p>
+                        
+                        <h3>Our Philosophy</h3>
+                        <p>We believe that travel is more than just a destination; it's a way of life. Our team of experienced travel writers and photographers travel the globe to bring you exclusive insights, hidden gems, and unforgettable experiences.</p>
+                        
+                        <h3>Our Growth</h3>
+                        <p>Founded in 2015, we've grown from a small blog to one of the most respected travel publications, with readers in over 120 countries.</p>
+                    </article>
+                    <div class="about-image">
+                        <video src="assets/zs.mp4" controls autoplay loop muted></video>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 团队部分 -->
+        <section class="team-section elegant-section">
+            <div class="section-container">
+                <h2 class="section-title">Meet Our Team</h2>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <img src="assets/柯南.jpg" alt="Shiman She - Editor in Chief" loading="lazy">
+                        <h3>Shiman She</h3>
+                        <p>Editor in Chief</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="assets/胖虎虎.png" alt="Wenwen Chao - Sponsors and CTO" loading="lazy">
+                        <h3>Wenwen Chao</h3>
+                        <p>Sponsors and CTO</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="assets/服部平次.png" alt="Fengyao Sun - Travel Writer" loading="lazy">
+                        <h3>Fengyao Sun</h3>
+                        <p>Travel Writer</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="assets/hellokitty.png" alt="Luxin Zheng - Senior Photographer" loading="lazy">
+                        <h3>Luxin Zheng</h3>
+                        <p>Senior Photographer</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 手风琴部分 -->
+        <section class="accordion-section elegant-section">
+            <div class="section-container">
+                <h2 class="section-title">Our Background</h2>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                Our Beginnings
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                ELEGANT Travel is a premium travel magazine dedicated to providing discerning travelers with the finest travel experiences around the world. Our mission is to inspire, inform, and elevate your journey by showcasing the best of luxury travel, cultural exploration, and adventure.
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Our Philosophy
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                We believe that travel is more than just a destination; it's a way of life. Our team of experienced travel writers and photographers travel the globe to bring you exclusive insights, hidden gems, and unforgettable experiences.
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Our Growth
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Founded in 2015, we've grown from a small blog to one of the most respected travel publications, with readers in over 120 countries.
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Our Team
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Our team is composed of experienced travel writers, photographers, and editors who are passionate about sharing the world's most beautiful destinations and experiences.
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Our Mission
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Our mission is to inspire, inform, and elevate your journey by showcasing the best of luxury travel, cultural exploration, and adventure.
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSix">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                Our Vision
+                            </button>
+                        </h2>
+                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                We aim to bring you the best luxury travel experiences, cultural exploration, and adventure, while promoting sustainable and responsible tourism.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚部分 -->
+    <footer class="footer elegant-section">
+        <div class="section-container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Explore</h4>
+                        <ul>
+                            <li><a href="#destinations">Destinations</a></li>
+                            <li><a href="#stories">Travel Stories</a></li>
+                            <li><a href="#about">About Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">Twitter</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ELEGANT Travel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="single-page.js"></script>
+</body>
+</html> 
